@@ -1,8 +1,8 @@
 [package]
-name = "create-ncl-app"
+name = "neoncitylights"
 version = "0.1.0"
 authors = [
-	"Samantha Nguyen, <contact@samanthanguyen.me>",
+	"Samantha Nguyen <contact@samanthanguyen.me>",
 ]
 description = "A CLI tool by Neoncitylights to quickly create a new project"
 readme = "../../README.md"
@@ -12,19 +12,11 @@ rust-version = "1.70.0"
 # keywords = []
 # categories = []
 exclude = [
-	".devcontainer",
-	".github",
-	".vscode",
-	".idea",
-	"deny.toml",
-	".commitlintrc.json",
-	"package.json",
-	"package-lock.json",
 	"fuzz",
 	"book",
 	"benches",
 ]
 
 [[bin]]
-name = "create-ncl-app"
+name = "neoncitylights"
 path = "src/main.rs"

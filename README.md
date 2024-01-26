@@ -1,9 +1,9 @@
-# create-ncl-app
+# neoncitylights/cli
 
 [![License](https://img.shields.io/badge/License-MIT%20%26%20Apache%202.0-blue?style=flat-square)](#license)
-[![CI workflow](https://img.shields.io/github/actions/workflow/status/neoncitylights/create-ncl-app/main.yml?style=flat-square&logo=github&logoColor=white&label=CI%20workflow)]((https://github.com/neoncitylights/create-ncl-app/actions/workflows/main.yml))
-[![CI workflow](https://img.shields.io/github/actions/workflow/status/neoncitylights/create-ncl-app/security-audit.yml?style=flat-square&logo=github&logoColor=white&label=CI%20security%20audit)]((https://github.com/neoncitylights/create-ncl-app/actions/workflows/security-audit.yml))
-[![codecov](https://codecov.io/gh/neoncitylights/create-ncl-app/branch/main/graph/badge.svg?token=6ZSIWAQTHU)](https://codecov.io/gh/neoncitylights/create-ncl-app)
+[![CI workflow](https://img.shields.io/github/actions/workflow/status/neoncitylights/cli/main.yml?style=flat-square&logo=github&logoColor=white&label=CI%20workflow)]((https://github.com/neoncitylights/cli/actions/workflows/main.yml))
+[![CI workflow](https://img.shields.io/github/actions/workflow/status/neoncitylights/cli/security-audit.yml?style=flat-square&logo=github&logoColor=white&label=CI%20security%20audit)]((https://github.com/neoncitylights/cli/actions/workflows/security-audit.yml))
+[![codecov](https://codecov.io/gh/neoncitylights/cli/branch/main/graph/badge.svg?token=6ZSIWAQTHU)](https://codecov.io/gh/neoncitylights/cli)
 
 A CLI to create a new project based on the following templates:
 
@@ -16,7 +16,7 @@ A CLI to create a new project based on the following templates:
 ## Install
 
 ```shell
-cargo install create-ncl-app
+cargo install neoncitylights
 ```
 
 ## License
