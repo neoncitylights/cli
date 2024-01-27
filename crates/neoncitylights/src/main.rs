@@ -1,5 +1,5 @@
 use clap::builder::PossibleValuesParser;
-use clap::{crate_authors, Arg, Command as ClapCommand};
+use clap::{crate_authors, crate_version, Arg, Command as ClapCommand};
 use std::process::Command;
 
 fn main() {
@@ -22,7 +22,7 @@ fn main() {
 				.expect("failed to convert commit hash to string")
 				.trim_end();
 
-			println!("neoncitylights v1.0.0 ({})", commit_hash_str);
+			println!("neoncitylights {} ({})", crate_version!(), commit_hash_str);
 		}
 		_ => unreachable!(),
 	}
@@ -60,7 +60,7 @@ fn subcommands() -> [ClapCommand; 3] {
 
 	let submcd_create = ClapCommand::new("new")
 		.aliases(["create"])
-		.about("create a new project from a template")
+		.about("Create a new project from a template")
 		// .help_template(help_template_subcommand())
 		.arg(Arg::new("name").help("Name of the project"))
 		.arg(Arg::new("language")
@@ -94,10 +94,10 @@ fn help_template_subcommand() -> &'static str {
 }
 
 fn root_help_template() -> &'static str {
-	color_print::untagged!(
+	color_print::cstr!(
 		"\
 		Author: \t{author}\n\
-		Source code: \thttps://github.com/neoncitylights/cli\n\n\
+		Source code: \t<blue>https://github.com/neoncitylights/cli</blue>\n\n\
 		{about}\n\
 		\nUsage:\n  {usage}\n\
 		\nCommands:\n{subcommands}\n\
