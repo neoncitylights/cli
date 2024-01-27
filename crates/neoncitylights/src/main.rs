@@ -1,6 +1,6 @@
-use std::process::Command;
-use clap::{crate_authors, Arg, Command as ClapCommand};
 use clap::builder::PossibleValuesParser;
+use clap::{crate_authors, Arg, Command as ClapCommand};
+use std::process::Command;
 
 fn main() {
 	let cli = cli();
@@ -10,19 +10,18 @@ fn main() {
 			Some(("licenses", _licenses_matches)) => {}
 			_ => unreachable!(),
 		},
-		Some(("new", _submatches)) => {
-		},
+		Some(("new", _submatches)) => {}
 		Some(("version", _submatches)) => {
 			let commit_hash = Command::new("git")
 				.args(&["rev-parse", "--short", "HEAD"])
 				.output()
 				.expect("failed to execute git command")
 				.stdout;
-		
+
 			let commit_hash_str = std::str::from_utf8(&commit_hash)
 				.expect("failed to convert commit hash to string")
 				.trim_end();
-		
+
 			println!("neoncitylights v1.0.0 ({})", commit_hash_str);
 		}
 		_ => unreachable!(),
@@ -43,43 +42,44 @@ fn cli() -> ClapCommand {
 
 fn subcommands() -> [ClapCommand; 3] {
 	let subcmd_config = ClapCommand::new("config")
-			.about("Configure default settings for project creation")
-			.help_template(help_template_subcommand())
-			.arg_required_else_help(true)
-			.subcommands([
-				ClapCommand::new("set")
-					.about("Set a default setting")
-					.help_template(help_template_subcommand())
-					.subcommand_precedence_over_arg(true),
-				ClapCommand::new("get")
-					.about("Get a default setting")
-					.help_template(help_template_subcommand()),
-				ClapCommand::new("list")
-					.about("List all default settings")
-					.help_template(help_template_subcommand()),
-			]);
+		.about("Configure default settings for project creation")
+		.help_template(help_template_subcommand())
+		.arg_required_else_help(true)
+		.subcommands([
+			ClapCommand::new("set")
+				.about("Set a default setting")
+				.help_template(help_template_subcommand())
+				.subcommand_precedence_over_arg(true),
+			ClapCommand::new("get")
+				.about("Get a default setting")
+				.help_template(help_template_subcommand()),
+			ClapCommand::new("list")
+				.about("List all default settings")
+				.help_template(help_template_subcommand()),
+		]);
 
 	let submcd_create = ClapCommand::new("new")
 		.aliases(["create"])
 		.about("create a new project from a template")
 		// .help_template(help_template_subcommand())
-		.arg(Arg::new("name")
-			.help("Name of the project"))
+		.arg(Arg::new("name").help("Name of the project"))
 		.arg(Arg::new("language")
 			.help("Main programming language to use for the project")
-			.value_parser(PossibleValuesParser::new(["ts", "typescript", "rust", "php", "c", "c++"])))
+			.value_parser(PossibleValuesParser::new([
+				"ts",
+				"typescript",
+				"rust",
+				"php",
+				"c",
+				"c++",
+			])))
 		.arg(Arg::new("kind")
 			.help("kind of project to create")
 			.value_parser(PossibleValuesParser::new(["app", "lib", "executable"])));
 
-	let subcmd_version = ClapCommand::new("version")
-		.about("Current version of the CLI");
+	let subcmd_version = ClapCommand::new("version").about("Current version of the CLI");
 
-	[
-		subcmd_config,
-		submcd_create,
-		subcmd_version,
-	]
+	[subcmd_config, submcd_create, subcmd_version]
 }
 
 fn help_template_subcommand() -> &'static str {
