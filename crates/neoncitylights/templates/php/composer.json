@@ -1,0 +1,46 @@
+{
+	"name": "author/package",
+	"description": "repository template for creating composer packages",
+	"authors": [
+		{
+			"name": "Samantha",
+			"email": "contact@samanthanguyen.me"
+		}
+	],
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Neoncitylights\\ExampleLibrary\\": "src/"
+		}
+	},
+	"require-dev": {
+		"mediawiki/mediawiki-codesniffer": "41.0.0",
+		"mediawiki/minus-x": "1.1.1",
+		"php-parallel-lint/php-parallel-lint": "1.3.2",
+		"php-parallel-lint/php-console-highlighter": "1.0.0",
+		"phpunit/phpunit": "10.1.2",
+		"vimeo/psalm": "5.11.0"
+	},
+	"scripts": {
+		"test": [
+			"parallel-lint . --exclude vendor --exclude node_modules",
+			"./vendor/bin/phpunit tests",
+			"minus-x check .",
+			"phpcs -p -s",
+			"psalm"
+		],
+		"fix": [
+			"minus-x fix .",
+			"phpcbf"
+		],
+		"docs": [
+			"phpdoc"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true
+		}
+	}
+}
