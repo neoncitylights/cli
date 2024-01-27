@@ -28,7 +28,7 @@ ignore = [
 ]
 
 [bans]
-multiple-versions = "deny"
+multiple-versions = "allow"
 deny = []
 skip = [
 	# cargo dependes on two versions

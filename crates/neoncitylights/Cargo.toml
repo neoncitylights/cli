@@ -20,3 +20,15 @@ exclude = [
 [[bin]]
 name = "neoncitylights"
 path = "src/main.rs"
+
+[dependencies]
+color-print = "0.3.5"
+crossterm = "0.27.0"
+ratatui = "0.25.0"
+spdx = "0.10.3"
+
+[dependencies.clap]
+version = "4.4.18"
+features = [
+	"cargo"
+]
