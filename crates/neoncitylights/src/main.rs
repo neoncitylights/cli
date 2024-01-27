@@ -7,7 +7,9 @@ fn main() {
 	let matches = cli.get_matches();
 	match matches.subcommand() {
 		Some(("config", submatches)) => match submatches.subcommand() {
-			Some(("licenses", _licenses_matches)) => {}
+			Some(("set", _submatches)) => {}
+			Some(("get", _submatches)) => {}
+			Some(("list", _submatches)) => {}
 			_ => unreachable!(),
 		},
 		Some(("new", _submatches)) => {}
