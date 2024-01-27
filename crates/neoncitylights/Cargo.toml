@@ -5,6 +5,7 @@ authors = [
 	"Samantha Nguyen <contact@samanthanguyen.me>",
 ]
 description = "A CLI tool by Neoncitylights to quickly create a new project"
+repository = "https://github.com/neoncitylights/cli"
 readme = "../../README.md"
 license = "MIT OR Apache-2.0"
 edition = "2021"
