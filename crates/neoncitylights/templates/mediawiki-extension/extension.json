@@ -1,0 +1,33 @@
+{
+	"name": "{{extension-uc}}",
+	"version": "1.0.0",
+	"author": [
+		"{{author}}"
+	],
+	"license-name": "MIT",
+	"url": "https://www.mediawiki.org/wiki/Extension:{{extension-uc}}",
+	"descriptionmsg": "{{extension-lc}}-desc",
+	"type": "other",
+	"MessagesDirs": {
+		"{{extension-uc}}": [
+			"i18n"
+		]
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\{{extension-uc}}\\": "includes/"
+	},
+	"SpecialPages": {
+		"HelloWorld": {
+			"class": "MediaWiki\\Extension\\{{extension-uc}}\\Specials\\SpecialHelloWorld"
+		}
+	},
+	"ExtensionMessagesFiles": {
+		"{{extension-uc}}Aliases": "{{extension-uc}}.i18n.alias.php"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "{{extension-uc}}"
+	},
+	"ResourceModules": {},
+	"manifest_version": 2
+}

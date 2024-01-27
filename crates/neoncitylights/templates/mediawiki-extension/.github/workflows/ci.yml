@@ -1,0 +1,148 @@
+name: PHP CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  PHP_LATEST: 8.2
+  ENABLE_JOB_PHAN: true
+
+jobs:
+  build-php:
+    name: build-php (PHP v${{ matrix.php }}, experimental=${{ matrix.experimental }})
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        php: 
+          # NOTES
+          # Please keep in mind the software system requirements for MediaWiki.
+          #  - As of MediaWiki 1.39, the minimum PHP version supported is 7.4.3.
+          #    Official support for PHP 8.0 and above also starts with this version.
+          #  - This GitHub Actions job specifically has a PHP build matrix for
+          #    ensuring it's compatible across different PHP versions.
+          #
+          # LINKS
+          # https://www.mediawiki.org/wiki/Version_lifecycle
+          # https://www.mediawiki.org/wiki/Compatibility#PHP
+          # https://www.mediawiki.org/wiki/Support_policy_for_PHP
+          - '7.4.3'
+          - '8.1'
+          - '8.2'
+        experimental:
+          - false
+        include:
+          - php: '8.3'
+            experimental: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        tools: composer:v2
+    - name: Validate composer.json and composer.lock
+      run: composer validate --no-check-publish
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress
+
+  lint-php:
+    runs-on: ubuntu-latest
+    needs: build-php
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_LATEST }}
+        tools: composer:v2
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Lint PHP with PHPCS, php-parallel-lint
+      run: composer test
+
+  lint-grunt:
+    runs-on: ubuntu-latest
+    needs: build-php
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: latest
+        cache: 'npm'
+    - name: Install NPM dependencies
+      run: npm ci
+    - name: Run Grunt tasks
+      run: npm run test
+
+  test-phpunit:
+    runs-on: ubuntu-latest
+    needs: build-php
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_LATEST }}
+        tools: composer:v2
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Run PHPUnit tests
+      run: composer test
+
+  test-phan:
+    runs-on: ubuntu-latest
+    needs: build-php
+    continue-on-error: true
+    if: ${{ vars.ENABLE_JOB_PHAN }} == 'true'
+    env:
+      # Phan runs faster without Xdebug enabled,
+      # and only needed for debugging Phan itself
+      PHAN_ALLOW_XDEBUG: 0 
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_LATEST }}
+        tools: composer:v2
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Install php-ast dependency
+      run: sudo apt-get install -y php-ast
+    - name: Run Phan tests
+      run: composer phan
+      continue-on-error: true
+
+  ci-success:
+    runs-on: ubuntu-latest
+    name: ci-success
+    if: ${{ success() && github.event_name == 'push' }}
+    needs:
+      - build-php
+      - lint-php
+      - lint-grunt
+      - test-phpunit
+      - test-phan
+    steps:
+      - name: ✅ CI succeeded
+        run: exit 0
