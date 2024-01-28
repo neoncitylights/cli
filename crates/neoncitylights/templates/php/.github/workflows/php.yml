@@ -1,0 +1,52 @@
+name: PHP CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PHP_LATEST: 8.2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: 
+          - '8.1'
+          - '8.2'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        tools: composer:v2, phpdoc
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Run test suite
+      run: composer test
+
+  ci-success:
+    runs-on: ubuntu-latest
+    name: ci-success
+    needs:
+      - build
+    steps:
+      - name: ✅ CI succeeded
+        run: exit 0

@@ -1,0 +1,49 @@
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore(deps/composer):"
+    labels:
+      - "t-dependencies"
+      - "pkg-composer"
+    groups:
+      mediawiki:
+        patterns:
+          - "mediawiki/*"
+      php-parallel-lint:
+        patterns:
+          - "php-parallel-lint/*"
+    open-pull-requests-limit: 4
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore(deps/npm):"
+    labels:
+      - "t-dependencies"
+      - "pkg-npm"
+    groups:
+      mediawiki:
+        patterns:
+          - "grunt-*"
+          - "eslint-config-wikimedia"
+          - "stylelint-config-wikimedia"
+    open-pull-requests-limit: 4
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore(deps/actions):"
+    labels:
+      - "t-dependencies"
+      - "pkg-gh-actions"
+    open-pull-requests-limit: 4

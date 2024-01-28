@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	colors="true"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+
+	backupGlobals="false"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutOutputDuringTests="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	forceCoversAnnotation="true"
+	failOnWarning="true"
+	stopOnFailure="false"
+	stopOnIncomplete="false"
+	stopOnSkipped="false"
+	verbose="false">
+	<php>
+		<ini name="memory_limit" value="512M" />
+	</php>
+	<testsuites>
+		<testsuite name="mw-extension-{{extension-uc}}-Unit">
+			<directory suffix="Test.php">./tests/phpunit/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

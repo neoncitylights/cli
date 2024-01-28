@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"{{author}}"
+		]
+	},
+	"helloworld": "The displayed page title for Special:HelloWorld",
+	"{{extension-lc}}-desc": "A description of the MediaWiki extension",
+	"{{extension-lc}}-helloworld": "A message that shows on Special:HelloWorld"
+}
