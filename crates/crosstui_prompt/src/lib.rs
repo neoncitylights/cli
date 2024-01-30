@@ -5,19 +5,13 @@ use crossterm::{
 };
 use std::io::{stdout, Result, Write};
 
-fn main() -> Result<()> {
-	let _result1 = prompt_yesno("Would you like to use TypeScript?")?;
-	let _result2 = prompt_yesno("Would you like to use Rust?")?;
-	Ok(())
-}
-
-fn prompt_yesno(question: &str) -> Result<bool> {
+pub fn prompt_yesno(question: &str) -> Result<bool> {
 	let choices = &["yes", "no"];
 	prompt(question, choices, |s| s.green().bold(), |s| s.grey()).map(|s| s == choices[0])
 }
 
 #[rustfmt::skip]
-fn prompt<
+pub fn prompt<
 	OnSelected,
 	OnUnselected,
 >(
