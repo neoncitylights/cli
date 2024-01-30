@@ -7,7 +7,14 @@ use std::io::{stdout, Result, Write};
 
 pub fn prompt_yesno(question: &str) -> Result<bool> {
 	let choices = &["yes", "no"];
-	prompt(question, choices, |s| s.green().bold(), |s| s.grey()).map(|s| s == choices[0])
+	prompt(
+		question,
+		choices,
+		" {} ",
+		|s| s.green().bold(),
+		|s| s.grey(),
+	)
+	.map(|s| s == choices[0])
 }
 
 #[rustfmt::skip]
@@ -17,6 +24,7 @@ pub fn prompt<
 >(
 	question: &str,
 	options: &[&str],
+	delimiter: &str,
 	on_selected: OnSelected,
 	on_unselected: OnUnselected,
 
@@ -37,7 +45,7 @@ where
 				print!("{}", on_unselected(style(option)));
 			}
 			if i != options.len() - 1 {
-				print!(" / ");
+				print!("{}", delimiter);
 			}
 		}
 		stdout().flush()?;
