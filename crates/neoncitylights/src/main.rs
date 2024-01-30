@@ -1,18 +1,56 @@
 use clap::builder::PossibleValuesParser;
 use clap::{crate_authors, crate_version, Arg, Command as ClapCommand};
+use crossterm::{
+	event::{self, KeyCode, KeyEventKind},
+	terminal::{disable_raw_mode, enable_raw_mode},
+};
+use ratatui::{
+	prelude::{CrosstermBackend, Stylize, Terminal},
+	widgets::Paragraph,
+};
+use std::io::{stdout, Result};
 use std::process::Command;
 
-fn main() {
+fn main() -> Result<()> {
 	let cli = cli();
 	let matches = cli.get_matches();
 	match matches.subcommand() {
 		Some(("config", submatches)) => match submatches.subcommand() {
-			Some(("set", _submatches)) => {}
-			Some(("get", _submatches)) => {}
-			Some(("list", _submatches)) => {}
+			Some(("set", _submatches)) => Ok(()),
+			Some(("get", _submatches)) => Ok(()),
+			Some(("list", _submatches)) => Ok(()),
 			_ => unreachable!(),
 		},
-		Some(("new", _submatches)) => {}
+		Some(("new", _submatches)) => {
+			enable_raw_mode()?;
+			let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
+			terminal.clear()?;
+
+			loop {
+				terminal.draw(|frame| {
+					let area = frame.size();
+					frame.render_widget(
+						Paragraph::new(
+							"Hello Ratatui! (press 'q' to quit)",
+						)
+						.white()
+						.on_blue(),
+						area,
+					);
+				})?;
+				if event::poll(std::time::Duration::from_millis(16))? {
+					if let event::Event::Key(key) = event::read()? {
+						if key.kind == KeyEventKind::Press
+							&& key.code == KeyCode::Char('q')
+						{
+							break;
+						}
+					}
+				}
+			}
+			disable_raw_mode()?;
+			Ok(())
+		}
 		Some(("version", _submatches)) => {
 			let commit_hash = Command::new("git")
 				.args(&["rev-parse", "--short", "HEAD"])
@@ -25,6 +63,7 @@ fn main() {
 				.trim_end();
 
 			println!("neoncitylights {} ({})", crate_version!(), commit_hash_str);
+			Ok(())
 		}
 		_ => unreachable!(),
 	}
