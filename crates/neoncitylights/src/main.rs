@@ -2,9 +2,7 @@ use clap::builder::PossibleValuesParser;
 use clap::{crate_authors, crate_version, Arg, Command as ClapCommand};
 use crossterm::{
 	event::{self, KeyCode, KeyEventKind},
-	terminal::{
-		disable_raw_mode, enable_raw_mode,
-	},
+	terminal::{disable_raw_mode, enable_raw_mode},
 };
 use ratatui::{
 	prelude::{CrosstermBackend, Stylize, Terminal},
@@ -18,11 +16,11 @@ fn main() -> Result<()> {
 	let matches = cli.get_matches();
 	match matches.subcommand() {
 		Some(("config", submatches)) => match submatches.subcommand() {
-			Some(("set", _submatches)) => { Ok(()) }
-			Some(("get", _submatches)) => { Ok(()) }
-			Some(("list", _submatches)) => { Ok(()) }
+			Some(("set", _submatches)) => Ok(()),
+			Some(("get", _submatches)) => Ok(()),
+			Some(("list", _submatches)) => Ok(()),
 			_ => unreachable!(),
-		}
+		},
 		Some(("new", _submatches)) => {
 			enable_raw_mode()?;
 			let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
@@ -32,9 +30,11 @@ fn main() -> Result<()> {
 				terminal.draw(|frame| {
 					let area = frame.size();
 					frame.render_widget(
-						Paragraph::new("Hello Ratatui! (press 'q' to quit)")
-							.white()
-							.on_blue(),
+						Paragraph::new(
+							"Hello Ratatui! (press 'q' to quit)",
+						)
+						.white()
+						.on_blue(),
 						area,
 					);
 				})?;
