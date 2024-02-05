@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["crosstui_prompt","crosstui_prompt_demo","neoncitylights"];

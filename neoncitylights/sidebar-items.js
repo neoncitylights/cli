@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["cli","help_template_subcommand","main","root_help_template","subcommands"]};
